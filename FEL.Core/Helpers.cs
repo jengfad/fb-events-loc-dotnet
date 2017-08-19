@@ -2,7 +2,6 @@ using System;
 
 namespace FEL.Core
 {
-    
     public static class Helpers
     {
         public static class Haversine
@@ -23,8 +22,5 @@ namespace FEL.Core
                 return Math.PI * angle / 180.0;
             }
         }
-    
     }
-
-    
 }

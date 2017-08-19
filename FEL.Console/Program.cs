@@ -1,25 +1,32 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using FEL.Core;
-
 namespace FEL.Console
 {
     class Program
     {
         static void Main(string[] args)
         {
-            var fbClient = new FbClient();
+            var fbClient = new FbClient(FbSettings.AccessToken);
             var fbService = new FbService(fbClient);
 
-            var getPlacesTask = fbService.GetPlaces(FbSettings.AccessToken);
-            Task.WaitAll(getPlacesTask);
+            // var placeRequest = new GetPlaceRequest{};
 
-            var getEventsTask = fbService.GetEvents(FbSettings.AccessToken);
-            Task.WaitAll(getEventsTask);
+            // placeRequest.Latitude = 40.710803;
+            // placeRequest.Longitude = -73.964040;
+            // placeRequest.Distance = 100;
+            // var token = new CancellationToken();
+            var task = fbService.GetEventsByLocation();
+            Task.WaitAll(task);
 
-            System.Console.WriteLine($"{getPlacesTask.Result}");
-            System.Console.WriteLine($"{getEventsTask.Result}");
+            System.Console.WriteLine("LOL");
+            // var getEventsTask = fbService.GetEvents();
+            // Task.WaitAll(getEventsTask);
+
+            System.Console.WriteLine($"{task.Result}");
+
+            
         }
-
     }
 }

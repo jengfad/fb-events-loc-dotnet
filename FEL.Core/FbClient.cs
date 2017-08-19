@@ -9,15 +9,19 @@ namespace FEL.Core
 {
     public interface IFbClient
     {
-        Task<T> GetAsync<T>(string accessToken, string endpoint, string args = null);
+        Task<T> GetAsync<T>(string endpoint, string args = null);
     }
 
     public class FbClient : IFbClient
     {
         private readonly HttpClient _httpClient;
+        private string _accessToken;
 
-        public FbClient()
+        public FbClient(string accessToken)
         {
+
+            _accessToken = accessToken;
+
             _httpClient = new HttpClient
             {
                 BaseAddress = new Uri("https://graph.facebook.com/v2.10/")
@@ -28,9 +32,9 @@ namespace FEL.Core
                 .Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task<T> GetAsync<T>(string accessToken, string endpoint, string args = null)
+        public async Task<T> GetAsync<T>(string endpoint, string args = null)
         {
-            var response = await _httpClient.GetAsync($"{endpoint}?access_token={accessToken}&{args}");
+            var response = await _httpClient.GetAsync($"{endpoint}?access_token={_accessToken}&{args}");
             if (!response.IsSuccessStatusCode)
                 return default(T);
 
