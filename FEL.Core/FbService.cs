@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using System.Text;
+using System.Linq;
 using Newtonsoft.Json;
 using FEL.Core.Models.Request;
 using FEL.Core.Models.Response;
@@ -32,7 +33,7 @@ namespace FEL.Core
             placeRequest.Distance = 100;
 
             var places = await GetPlaces(placeRequest);
-            var events = await GetEvents(BuildEventIdsUrl(places));
+            var events = await GetEvents(string.Join(",", places.data.Select(x => x.id).ToArray()));
             
             return events;
         }
@@ -46,22 +47,7 @@ namespace FEL.Core
         public async Task<dynamic> GetEvents(string placeIds)
         {   
             return await _fbClient.GetAsync<dynamic>(
-                "", "ids=" + placeIds + "&fields=id,name,about,emails,cover.fields(id,source),picture.type(large),category,category_list.fields(name),location,events.fields(id,type,name,cover.fields(id,source),picture.type(large),description,start_time,end_time,category,attending_count,declined_count,maybe_count,noreply_count).since(1503115498)");
-        }
-
-        private string BuildEventIdsUrl(GetPlaceResponse response)
-        {
-            StringBuilder builder = new StringBuilder();
-            
-            foreach (var value in response.data)
-            {
-                builder.Append(value.id).Append(",");
-            }
-
-            if (builder.ToString().EndsWith(","))
-                builder = builder.Remove(builder.Length - 1, 1);
-
-            return builder.ToString();
+                 "", "ids=" + placeIds + "&fields=id,name,about,emails,cover.fields(id,source),picture.type(large),category,category_list.fields(name),location,events.fields(id,type,name,cover.fields(id,source),picture.type(large),description,start_time,end_time,category,attending_count,declined_count,maybe_count,noreply_count).since(1503115498)");
         }
     }
 }

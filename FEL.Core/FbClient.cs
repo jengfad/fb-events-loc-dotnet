@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 using Newtonsoft.Json;
 
 namespace FEL.Core
@@ -34,6 +35,9 @@ namespace FEL.Core
 
         public async Task<T> GetAsync<T>(string endpoint, string args = null)
         {
+            string createText = $"{endpoint}?access_token={_accessToken}&{args}";
+            File.WriteAllText("generatedUrl.txt", createText);
+
             var response = await _httpClient.GetAsync($"{endpoint}?access_token={_accessToken}&{args}");
             if (!response.IsSuccessStatusCode)
                 return default(T);
