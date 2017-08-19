@@ -14,7 +14,12 @@ namespace FEL.Console
             var getPlacesTask = fbService.GetPlaces(FbSettings.AccessToken);
             Task.WaitAll(getPlacesTask);
 
+            var getEventsTask = fbService.GetEvents(FbSettings.AccessToken);
+            Task.WaitAll(getEventsTask);
+
             System.Console.WriteLine($"{getPlacesTask.Result}");
+            System.Console.WriteLine($"{getEventsTask.Result}");
         }
+
     }
 }
