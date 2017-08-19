@@ -33,9 +33,9 @@ namespace FEL.Core
             placeRequest.Distance = 100;
 
             var places = await GetPlaces(placeRequest);
-            var events = await GetEvents(string.Join(",", places.data.Select(x => x.id).ToArray()));
+            var events1 = await GetEvents(string.Join(",", places.data.Skip((0) * 50).Take(50).Select(x => x.id).ToArray()));
             
-            return events;
+            return events1;
         }
  
         public async Task<GetPlaceResponse> GetPlaces(GetPlaceRequest request)
