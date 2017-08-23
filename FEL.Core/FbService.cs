@@ -2,6 +2,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Text;
 using System.Linq;
+using System.IO;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using FEL.Core.Models.Request;
 using FEL.Core.Models.Response;
@@ -33,9 +35,23 @@ namespace FEL.Core
             placeRequest.Distance = 100;
 
             var places = await GetPlaces(placeRequest);
-            var events1 = await GetEvents(string.Join(",", places.data.Skip((0) * 50).Take(50).Select(x => x.id).ToArray()));
+
+            int groupSize = 50;
+
+            var groups = places.data
+                .Select((x, i) => new { Item = x, Index = i/groupSize })
+                .GroupBy(x => x.Index, x => x.Item.id);
             
-            return events1;
+            var results = await Task.WhenAll(groups.Select(i => GetEvents(string.Join(", ", i))));
+
+            string appendedRes = "";
+
+            foreach(var result in results)
+            {
+                appendedRes = appendedRes + result.ToString();
+            }
+
+            return appendedRes;
         }
  
         public async Task<GetPlaceResponse> GetPlaces(GetPlaceRequest request)
