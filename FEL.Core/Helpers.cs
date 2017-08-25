@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -21,6 +22,13 @@ namespace FEL.Core
         private static double toRadians(double angle) {
             return Math.PI * angle / 180.0;
         }
-        
+
+        public static void WriteToFile(this string Str)
+        {
+            string Filename = "generatedUrl.txt";
+            File.WriteAllText(Filename, Str);
+            return;
+        }
+
     }
 }

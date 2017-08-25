@@ -30,12 +30,14 @@ namespace FEL.Core
         {
             var placeRequest = new GetPlaceRequest{};
 
-            placeRequest.Latitude = 40.710803;
-            placeRequest.Longitude = -73.964040;
+            placeRequest.Latitude = 16.410759;
+            placeRequest.Longitude = 120.599535;
+            // placeRequest.Latitude = 40.710803;
+            // placeRequest.Longitude = -73.964040;
             placeRequest.Distance = 100;
 
             var places = await GetPlaces(placeRequest);
-
+            
             int groupSize = 50;
 
             var groups = places.data
@@ -50,6 +52,8 @@ namespace FEL.Core
             {
                 appendedRes = appendedRes + result.ToString();
             }
+
+            appendedRes.WriteToFile();
 
             return appendedRes;
         }

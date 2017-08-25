@@ -24,7 +24,7 @@ namespace FEL.Console
             // var getEventsTask = fbService.GetEvents();
             // Task.WaitAll(getEventsTask);
 
-            System.Console.WriteLine($"{task.Result}");
+            //System.Console.WriteLine($"{task.Result}");
 
             
         }
